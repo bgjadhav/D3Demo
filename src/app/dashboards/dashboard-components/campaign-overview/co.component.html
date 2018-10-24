@@ -1,0 +1,26 @@
+
+<div class="card ">
+    <div class="card-header text-white" style='background-color:#2962ff'>Contract Metrix
+
+                    <div class="float-right">
+    <div class="dl">
+                    <select class="custom-select">
+                        <option value="0" selected>Monthly</option>
+                        <option value="1">Daily</option>
+                        <option value="2">Weekly</option>
+                        <option value="3">Yearly</option>
+                    </select>
+                </div>
+    </div>
+    </div>
+    <div class="card-body">
+    
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non pharetra ligula, sit amet laoreet arcu.Integer.</p>
+        <a href="javascript: void(0)" class="font-bold">Last Month Summary</a>
+    </div>
+    <div class="m-t-40">
+        <canvas baseChart height="170" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+            [legend]="lineChartLegend" [chartType]="lineChartType">
+        </canvas>
+    </div>
+</div>

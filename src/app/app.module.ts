@@ -1,43 +1,74 @@
+import * as $ from 'jquery';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  CommonModule,
+  LocationStrategy,
+  HashLocationStrategy
+} from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Routes, RouterModule } from '@angular/router';
 
-import { MatMenuModule, MatSidenavModule } from '@angular/material';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AgmCoreModule } from '@agm/core';
 
+import { FullComponent } from './layouts/full/full.component';
+import { BlankComponent } from './layouts/blank/blank.component';
+import { LoginComponent } from './authentication/login/login.component';
+
+import { NavigationComponent } from './shared/header-navigation/navigation.component';
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
+
+import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LineChartComponent } from './01_line_chart/line-chart.component';
-import { MultiSeriesComponent } from './02_multi_series_line_chart/multi-series.component';
+import { SpinnerComponent } from './shared/spinner.component';
 
- import { HttpModule } from '@angular/http';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
-const appRoutes: Routes = [
-    { path: 'line-chart', component: LineChartComponent },
-    { path: 'multi-series', component: MultiSeriesComponent },
-   
-    { path: '',
-        redirectTo: '/line-chart',
-        pathMatch: 'full'
-    },
-    { path: '**', component: LineChartComponent }
-];
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true,
+  wheelSpeed: 1,
+  wheelPropagation: true,
+  minScrollbarLength: 20
+};
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        LineChartComponent,
-        MultiSeriesComponent,
-
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterModule.forRoot(appRoutes),
-        MatMenuModule,
-        MatSidenavModule,
-        HttpModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    SpinnerComponent,
+    FullComponent,
+    LoginComponent,
+    BlankComponent,
+    NavigationComponent,
+    BreadcrumbComponent,
+    SidebarComponent
+  ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    NgbModule.forRoot(),
+    RouterModule.forRoot(Approutes, { useHash: false }),
+    PerfectScrollbarModule,
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBUb3jDWJQ28vDJhuQZxkC0NXr_zycm8D0' })
+  ],
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    }
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
