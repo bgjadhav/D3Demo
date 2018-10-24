@@ -11,6 +11,17 @@ export const AuthenticationRoutes: Routes = [
   {
     path: '',
     children: [
+       {
+        path: 'login',
+        component: LoginComponent,
+        data: {
+          title: 'Authentication',
+          urls: [
+            { title: 'Authentication', url: '/authentication' },
+            { title: 'Classic Dashboard' }
+          ]
+        }
+      },
       {
         path: '404',
         component: NotfoundComponent
@@ -19,10 +30,7 @@ export const AuthenticationRoutes: Routes = [
         path: 'lock',
         component: LockComponent
       },
-      {
-        path: 'login',
-        component: LoginComponent
-      },
+     
       {
         path: 'login2',
         component: Login2Component

@@ -16,7 +16,7 @@ import { AgmCoreModule } from '@agm/core';
 
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
-import { LoginComponent } from './authentication/login/login.component';
+
 
 import { NavigationComponent } from './shared/header-navigation/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
@@ -42,7 +42,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppComponent,
     SpinnerComponent,
     FullComponent,
-    LoginComponent,
+    
     BlankComponent,
     NavigationComponent,
     BreadcrumbComponent,
