@@ -1,73 +1,82 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+
+import { STATISTICS } from '../data/bardata';
+import * as D3 from 'd3';
 @Component({
   selector: 'app-campaign-overview',
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './co.component.html'
 })
-export class CamoverComponent {
-  constructor() {}
+export class CamoverComponent implements OnInit {
+  title = 'Bar Chart';
 
-  public lineChartData: Array<any> = [
-    { data: [3, 8, 2, 3, 2, 5, 6, 8], label: 'A' },
-    { data: [7, 6, 5, 8, 6, 7, 2, 1], label: 'B' }
-  ];
-  public lineChartLabels: Array<any> = [1, 2, 3, 4, 5, 6, 7, 8];
-  public lineChartOptions: any = {
-    elements: { point: { radius: 2 } },
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      xAxes: [
-        {
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          ticks: {
-            display: false
-          }
-        }
-      ],
-      yAxes: [
-        {
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          ticks: {
-            display: false
-          }
-        }
-      ]
-    },
-    layout: {
-      padding: {
-        left: -10,
-        right: 0,
-        top: 0,
-        bottom: -10
-      }
-    }
-  };
-  public lineChartColors: Array<any> = [
-    {
-      pointBorderColor: '#2961ff',
-      pointHoverBackgroundColor: '#2961ff',
-      pointHoverBorderColor: '#009efb',
-      borderColor: '#2961ff',
-      borderWidth: 1,
-      backgroundColor: 'rgba(41, 97, 255, .3)',
-      pointBackgroundColor: '#2961ff'
-    },
-    {
-      pointBorderColor: '#4dd0e1',
-      pointHoverBackgroundColor: '#4dd0e1',
-      pointHoverBorderColor: '#55ce63',
-      borderColor: '#4dd0e1',
-      borderWidth: 1,
-      backgroundColor: 'rgba(77, 208, 225, .3)',
-      pointBackgroundColor: '#4dd0e1'
-    }
-  ];
-  public lineChartLegend = false;
-  public lineChartType = 'line';
+  private width: number;
+  private height: number;
+  private margin = { top: 20, right: 20, bottom: 30, left: 40 };
+
+  private x: any;
+  private y: any;
+  private svg: any;
+  private g: any;
+
+  constructor() { }
+
+  ngOnInit() {
+    var svg = D3.select("svg"),
+      margin = { top: 20, right: 20, bottom: 30, left: 80 },
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom;
+   var colors = ["blue","red","green"];
+    var tooltip = D3.select("body").append("div").attr("class", "toolTip");
+
+    var x = D3.scaleLinear().range([0, width]);
+    var y = D3.scaleBand().range([height, 0]);
+    var color = D3.scaleOrdinal() 
+      .range(["#D73027", "#FFFFBF" , "#1A9850"]);
+   
+   
+    var g = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    STATISTICS.sort(function (a, b) { return a.value - b.value; });
+
+    x.domain([0, D3.max(STATISTICS, function (d) { return d.value; })]);
+    y.domain(STATISTICS.map(function (d) { return d.area; })).padding(0.1);
+
+    g.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(D3.axisBottom(x));
+      
+
+    g.append("g")
+      .attr("class", "y axis")
+      .call(D3.axisLeft(y));
+
+    g.selectAll(".bar")
+      .data(STATISTICS)
+      .enter().append("rect")
+      /*.style("fill", function(d,i){
+        return color(i);
+        })*/
+      .attr("class", "bar")
+      .attr("x", 0)
+      .attr("height", y.bandwidth())
+      .attr("y", function (d) { return y(d.area); })
+      
+      .attr("width", function (d) { return x(d.value); })
+      .on("mousemove", function (d) {
+        tooltip
+          .style("left", D3.event.pageX - 50 + "px")
+          .style("top", D3.event.pageY - 70 + "px")
+          .style("display", "inline-block")
+          .html((d.area) + "<br>" + "£" + (d.value));
+      })
+      .on("mouseout", function (d) { tooltip.style("display", "none"); });
+
+  }
+
+ 
+
 }
